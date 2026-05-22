@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Mail, Spotify, Apple, Youtube } from 'lucide-react';
+import { Mail, Music, Headphones, Video } from 'lucide-react';
 
 /**
  * Design Philosophy: Cyberpunk Bold Gradient
@@ -33,9 +33,9 @@ export default function CTA() {
   };
 
   const socialLinks = [
-    { icon: Spotify, label: 'Spotify', color: 'hover:text-green-400' },
-    { icon: Apple, label: 'Apple Podcasts', color: 'hover:text-gray-300' },
-    { icon: Youtube, label: 'YouTube', color: 'hover:text-red-400' },
+    { icon: Music, label: 'Spotify', color: 'hover:text-green-400' },
+    { icon: Headphones, label: 'Apple Podcasts', color: 'hover:text-gray-300' },
+    { icon: Video, label: 'YouTube', color: 'hover:text-red-400' },
   ];
 
   return (
