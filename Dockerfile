@@ -5,15 +5,14 @@ FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Kopiere nur die notwendigen Dateien für Dependencies
-COPY package.json pnpm-lock.yaml ./
-
-# Installiere pnpm und Dependencies
-RUN npm install -g pnpm@10.4.1 && \
-    pnpm install --frozen-lockfile
-
-# Kopiere Source Code
+# Kopiere alle Dateien für Build
 COPY . .
+
+# Installiere pnpm
+RUN npm install -g pnpm@10.4.1
+
+# Installiere alle Dependencies (inklusive dev)
+RUN pnpm install --frozen-lockfile
 
 # Build der Anwendung
 RUN pnpm run build
@@ -23,11 +22,14 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Installiere nur Runtime Dependencies
+# Installiere pnpm
+RUN npm install -g pnpm@10.4.1
+
+# Kopiere package.json und lock file
 COPY package.json pnpm-lock.yaml ./
 
-RUN npm install -g pnpm@10.4.1 && \
-    pnpm install --frozen-lockfile --prod
+# Installiere nur Production Dependencies (ohne patches)
+RUN pnpm install --frozen-lockfile --prod --no-optional || true
 
 # Kopiere nur die notwendigen Build-Artefakte
 COPY --from=builder /app/dist ./dist
