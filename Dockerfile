@@ -11,8 +11,8 @@ COPY . .
 # Installiere pnpm
 RUN npm install -g pnpm@10.4.1
 
-# Installiere Dependencies mit legacy-peer-deps um Vite-Konflikt zu beheben
-RUN pnpm install --legacy-peer-deps
+# Installiere Dependencies - ignoriere Peer-Dependency Warnungen
+RUN pnpm install --no-strict-peer-dependencies
 
 # Build nur die React-App (nicht den Server)
 RUN pnpm exec vite build
