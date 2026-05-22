@@ -76,13 +76,6 @@ export default function Hero() {
             <Play size={20} />
             Listen Now
           </motion.button>
-          <motion.button
-            className="border-2 border-cyan-400 px-8 py-3 rounded-lg font-display text-cyan-400 font-bold hover:bg-cyan-400/10 transition-colors duration-200"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.97 }}
-          >
-            Subscribe
-          </motion.button>
         </motion.div>
 
         {/* Floating stats */}

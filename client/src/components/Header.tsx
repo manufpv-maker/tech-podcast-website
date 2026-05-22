@@ -46,15 +46,6 @@ export default function Header() {
           ))}
         </nav>
 
-        {/* CTA Button */}
-        <motion.button
-          className="hidden md:block glass-effect neon-glow px-6 py-2 rounded-lg font-display text-white font-bold"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.97 }}
-        >
-          Subscribe
-        </motion.button>
-
         {/* Mobile menu button */}
         <motion.button
           className="md:hidden text-cyan-400"
