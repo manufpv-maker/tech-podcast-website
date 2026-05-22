@@ -28,8 +28,8 @@ RUN npm install -g pnpm@10.4.1
 # Kopiere package.json und lock file
 COPY package.json pnpm-lock.yaml ./
 
-# Installiere nur Production Dependencies (ohne patches)
-RUN pnpm install --frozen-lockfile --prod --no-optional || true
+# Installiere Production Dependencies
+RUN pnpm install --frozen-lockfile --prod
 
 # Kopiere nur die notwendigen Build-Artefakte
 COPY --from=builder /app/dist ./dist
