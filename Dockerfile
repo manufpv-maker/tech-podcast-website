@@ -1,46 +1,45 @@
-# Railway-optimierte Multi-Stage Build für minimale Größe und schnelle Deployments
-# Kostenlose Version: Optimiert für niedrige Ressourcennutzung
+# Railway-optimierte Dockerfile für statische Website
+# Kostenlose Version: Minimale Größe und schnelle Deployments
 
 FROM node:22-alpine AS builder
 
 WORKDIR /app
 
-# Kopiere alle Dateien für Build
+# Kopiere nur package.json zuerst
+COPY package.json ./
+
+# Installiere pnpm ohne patches-Verarbeitung
+RUN npm install -g pnpm@10.4.1 && \
+    npm install --omit=dev
+
+# Kopiere alle anderen Dateien
 COPY . .
 
-# Installiere pnpm
-RUN npm install -g pnpm@10.4.1
-
-# Installiere alle Dependencies (inklusive dev)
-RUN pnpm install --frozen-lockfile
-
 # Build der Anwendung
-RUN pnpm run build
+RUN npm run build
 
-# Production Stage - Minimale Größe
-FROM node:22-alpine
+# Production Stage - Nginx für statische Dateien
+FROM nginx:alpine
 
-WORKDIR /app
+# Kopiere die gebauten Dateien
+COPY --from=builder /app/dist/public /usr/share/nginx/html
 
-# Installiere pnpm
-RUN npm install -g pnpm@10.4.1
-
-# Kopiere package.json und lock file
-COPY package.json pnpm-lock.yaml ./
-
-# Installiere Production Dependencies
-RUN pnpm install --frozen-lockfile --prod
-
-# Kopiere nur die notwendigen Build-Artefakte
-COPY --from=builder /app/dist ./dist
+# Nginx Konfiguration für SPA
+RUN echo 'server { \
+    listen 3000; \
+    root /usr/share/nginx/html; \
+    index index.html; \
+    location / { \
+        try_files $uri $uri/ /index.html; \
+    } \
+}' > /etc/nginx/conf.d/default.conf
 
 # Expose Port
 EXPOSE 3000
 
 # Health Check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 \
-    CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD wget --quiet --tries=1 --spider http://localhost:3000/ || exit 1
 
-# Start Production Server
-ENV NODE_ENV=production
-CMD ["node", "dist/index.js"]
+# Start Nginx
+CMD ["nginx", "-g", "daemon off;"]
