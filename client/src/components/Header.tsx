@@ -27,8 +27,8 @@ export default function Header() {
           className="font-display text-2xl font-bold text-white"
           whileHover={{ scale: 1.05 }}
         >
-          <span className="text-cyan-400">Tech</span>
-          <span className="text-pink-400">Cast</span>
+          <span className="text-cyan-400">Der Debug</span>
+          <span className="text-pink-400">Podcast</span>
         </motion.div>
 
         {/* Desktop Navigation */}
