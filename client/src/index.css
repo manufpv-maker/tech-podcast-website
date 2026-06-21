@@ -213,6 +213,60 @@
     animation: glow-pulse 2s ease-in-out infinite;
   }
 
+  /* Glitch Animation */
+  @keyframes glitch {
+    0% {
+      clip-path: polygon(0 0, 100% 0, 100% 5%, 0 5%);
+      transform: translate(0);
+    }
+    20% {
+      clip-path: polygon(0 15%, 100% 15%, 100% 25%, 0 25%);
+      transform: translate(-2px, 2px);
+    }
+    40% {
+      clip-path: polygon(0 40%, 100% 40%, 100% 50%, 0 50%);
+      transform: translate(2px, -2px);
+    }
+    60% {
+      clip-path: polygon(0 60%, 100% 60%, 100% 70%, 0 70%);
+      transform: translate(-2px, 2px);
+    }
+    80% {
+      clip-path: polygon(0 80%, 100% 80%, 100% 90%, 0 90%);
+      transform: translate(2px, -2px);
+    }
+    100% {
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      transform: translate(0);
+    }
+  }
+
+  .glitch-animation {
+    animation: glitch 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+  }
+
+  /* Page Transition Glitch */
+  @keyframes glitch-in {
+    0% {
+      opacity: 0;
+      clip-path: polygon(0 0, 100% 0, 100% 5%, 0 5%);
+      transform: translate(-10px, 10px);
+    }
+    50% {
+      clip-path: polygon(0 40%, 100% 40%, 100% 60%, 0 60%);
+      transform: translate(5px, -5px);
+    }
+    100% {
+      opacity: 1;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+      transform: translate(0);
+    }
+  }
+
+  .glitch-in {
+    animation: glitch-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
   /* Typography */
   .font-display {
     font-family: 'Space Mono', monospace;

@@ -6,17 +6,28 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import { useState, useEffect } from "react";
 
 
 function Router() {
+  const [isTransitioning, setIsTransitioning] = useState(false);
+
+  useEffect(() => {
+    setIsTransitioning(true);
+    const timer = setTimeout(() => setIsTransitioning(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <Switch>
-      <Route path={"/"} component={Home} />
-      <Route path={"/about"} component={About} />
-      <Route path={"/404"} component={NotFound} />
-      {/* Final fallback route */}
-      <Route component={NotFound} />
-    </Switch>
+    <div className={isTransitioning ? "glitch-in" : ""}>
+      <Switch>
+        <Route path={"/"} component={Home} />
+        <Route path={"/about"} component={About} />
+        <Route path={"/404"} component={NotFound} />
+        {/* Final fallback route */}
+        <Route component={NotFound} />
+      </Switch>
+    </div>
   );
 }
 
