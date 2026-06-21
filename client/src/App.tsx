@@ -6,6 +6,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import About from "./pages/About";
+import Intro from "./pages/Intro";
 import { useState, useEffect } from "react";
 
 
@@ -21,6 +22,7 @@ function Router() {
   return (
     <div className={isTransitioning ? "glitch-in" : ""}>
       <Switch>
+        <Route path={"/intro"} component={Intro} />
         <Route path={"/"} component={Home} />
         <Route path={"/about"} component={About} />
         <Route path={"/404"} component={NotFound} />
