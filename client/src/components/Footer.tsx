@@ -35,17 +35,17 @@ export default function Footer() {
             <h4 className="text-white font-bold mb-4">Navigation</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#home" className="text-gray-400 hover:text-white transition-colors">
+                <a href="/" className="text-gray-400 hover:text-white transition-colors">
                   Home
                 </a>
               </li>
               <li>
-                <a href="#about" className="text-gray-400 hover:text-white transition-colors">
+                <a href="/about" className="text-gray-400 hover:text-white transition-colors">
                   About
                 </a>
               </li>
               <li>
-                <a href="#contact" className="text-gray-400 hover:text-white transition-colors">
+                <a href="/contact" className="text-gray-400 hover:text-white transition-colors">
                   Contact
                 </a>
               </li>

@@ -28,17 +28,20 @@ export default function Header() {
 
         {/* Desktop Navigation */}
         <nav className="hidden md:flex items-center gap-8">
-          {navItems.map((item) => (
-            <motion.a
-              key={item}
-              href={`#${item.toLowerCase()}`}
-              className="text-gray-300 hover:text-white transition-colors duration-200"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {item}
-            </motion.a>
-          ))}
+          {navItems.map((item) => {
+            const path = item === 'Home' ? '/' : `/${item.toLowerCase()}`;
+            return (
+              <motion.a
+                key={item}
+                href={path}
+                className="text-gray-300 hover:text-white transition-colors duration-200"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {item}
+              </motion.a>
+            );
+          })}
         </nav>
 
         {/* Mobile menu button */}
@@ -60,16 +63,19 @@ export default function Header() {
           className="md:hidden bg-background border-t border-gray-800"
         >
           <nav className="container mx-auto px-4 py-4 flex flex-col gap-4">
-            {navItems.map((item) => (
-              <a
-                key={item}
-                href={`#${item.toLowerCase()}`}
-                className="text-gray-300 hover:text-white transition-colors duration-200"
-                onClick={() => setIsOpen(false)}
-              >
-                {item}
-              </a>
-            ))}
+            {navItems.map((item) => {
+              const path = item === 'Home' ? '/' : `/${item.toLowerCase()}`;
+              return (
+                <a
+                  key={item}
+                  href={path}
+                  className="text-gray-300 hover:text-white transition-colors duration-200"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {item}
+                </a>
+              );
+            })}
           </nav>
         </motion.div>
       )}
