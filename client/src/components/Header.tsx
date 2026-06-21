@@ -23,7 +23,7 @@ export default function Header() {
           whileHover={{ scale: 1.05 }}
         >
           <img
-            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663350287427/enmAwgtoyiDevNipdYAUmq/debug-podcast-watermark-logo-N72vFsraQN7FmvsYpQ4GZR.webp"
+            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663350287427/enmAwgtoyiDevNipdYAUmq/debug-podcast-logo-colored-iUrir77jNhDtnd3bSVD8xA.webp"
             alt="Der Debug Podcast Logo"
             className="w-8 h-8"
           />
