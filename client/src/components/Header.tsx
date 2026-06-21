@@ -28,8 +28,8 @@ export default function Header() {
             className="w-8 h-8"
           />
           <span className="font-display text-lg font-bold hidden sm:inline">
-            <span className="text-cyan-400">Der</span>
-            <span className="text-pink-400"> Debug</span>
+            <span className="text-white">Der </span>
+            <span className="bg-gradient-to-r from-cyan-400 to-pink-400 bg-clip-text text-transparent">Debug</span>
             <span className="text-white"> Podcast</span>
           </span>
         </motion.div>
