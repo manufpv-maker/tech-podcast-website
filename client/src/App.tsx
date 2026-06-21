@@ -7,6 +7,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import Home from "./pages/Home";
 import About from "./pages/About";
 import Intro from "./pages/Intro";
+import Outro from "./pages/Outro";
 import { useState, useEffect } from "react";
 
 
@@ -23,6 +24,7 @@ function Router() {
     <div className={isTransitioning ? "glitch-in" : ""}>
       <Switch>
         <Route path={"/intro"} component={Intro} />
+        <Route path={"/outro"} component={Outro} />
         <Route path={"/"} component={Home} />
         <Route path={"/about"} component={About} />
         <Route path={"/404"} component={NotFound} />
