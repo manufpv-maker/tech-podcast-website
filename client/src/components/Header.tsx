@@ -19,11 +19,18 @@ export default function Header() {
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         {/* Logo */}
         <motion.div
-          className="font-display text-2xl font-bold text-white"
+          className="flex items-center gap-2"
           whileHover={{ scale: 1.05 }}
         >
-          <span className="text-cyan-400">Der Debug</span>
-          <span className="text-pink-400"> Podcast</span>
+          <img
+            src="https://d2xsxph8kpxj0f.cloudfront.net/310519663350287427/enmAwgtoyiDevNipdYAUmq/debug-podcast-watermark-logo-N72vFsraQN7FmvsYpQ4GZR.webp"
+            alt="Der Debug Podcast Logo"
+            className="w-8 h-8"
+          />
+          <span className="font-display text-lg font-bold text-white hidden sm:inline">
+            <span className="text-cyan-400">Der Debug</span>
+            <span className="text-pink-400"> Podcast</span>
+          </span>
         </motion.div>
 
         {/* Desktop Navigation */}

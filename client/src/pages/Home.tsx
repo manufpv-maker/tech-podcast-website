@@ -48,14 +48,21 @@ export default function Home() {
           animate="visible"
           className="container max-w-4xl mx-auto px-4"
         >
-          {/* Title */}
-          <motion.div variants={itemVariants} className="mb-12">
-            <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-              Der Debug Podcast
-            </h1>
-            <p className="text-lg text-gray-300">
-              Dein Podcast über Technologie und Programmierung
-            </p>
+          {/* Logo & Title */}
+          <motion.div variants={itemVariants} className="mb-12 flex items-center gap-6">
+            <img
+              src="https://d2xsxph8kpxj0f.cloudfront.net/310519663350287427/enmAwgtoyiDevNipdYAUmq/debug-podcast-watermark-logo-N72vFsraQN7FmvsYpQ4GZR.webp"
+              alt="Der Debug Podcast Logo"
+              className="w-24 h-24 md:w-32 md:h-32"
+            />
+            <div>
+              <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+                Der Debug Podcast
+              </h1>
+              <p className="text-lg text-gray-300">
+                Dein Podcast über Technologie und Programmierung
+              </p>
+            </div>
           </motion.div>
 
           {/* Video Section */}
