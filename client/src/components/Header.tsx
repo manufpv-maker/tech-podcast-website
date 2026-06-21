@@ -27,9 +27,10 @@ export default function Header() {
             alt="Der Debug Podcast Logo"
             className="w-8 h-8"
           />
-          <span className="font-display text-lg font-bold text-white hidden sm:inline">
-            <span className="text-cyan-400">Der Debug</span>
-            <span className="text-pink-400"> Podcast</span>
+          <span className="font-display text-lg font-bold hidden sm:inline">
+            <span className="text-cyan-400">Der</span>
+            <span className="text-pink-400"> Debug</span>
+            <span className="text-white"> Podcast</span>
           </span>
         </motion.div>
 
