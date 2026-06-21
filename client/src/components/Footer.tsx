@@ -44,33 +44,7 @@ export default function Footer() {
                   About
                 </a>
               </li>
-              <li>
-                <a href="/contact" className="text-gray-400 hover:text-white transition-colors">
-                  Contact
-                </a>
-              </li>
             </ul>
-          </div>
-
-          {/* Contact */}
-          <div>
-            <h4 className="text-white font-bold mb-4">Kontakt</h4>
-            <div className="flex gap-4">
-              <a
-                href="mailto:contact@example.com"
-                className="text-gray-400 hover:text-cyan-400 transition-colors"
-                title="Email"
-              >
-                <Mail size={24} />
-              </a>
-              <a
-                href="https://github.com"
-                className="text-gray-400 hover:text-cyan-400 transition-colors"
-                title="GitHub"
-              >
-                <Github size={24} />
-              </a>
-            </div>
           </div>
         </motion.div>
 
