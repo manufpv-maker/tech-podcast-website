@@ -1,7 +1,7 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
-import { Users, Mic, BookOpen } from 'lucide-react';
+import { Users, Mic, BookOpen, ArrowLeft } from 'lucide-react';
 
 /**
  * Design Philosophy: Clean & Simple
@@ -97,6 +97,17 @@ export default function About() {
           animate="visible"
           className="container max-w-4xl mx-auto px-4"
         >
+          {/* Back Button */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 text-cyan-400 hover:text-cyan-300 transition-colors"
+            >
+              <ArrowLeft size={20} />
+              Zurück zur Startseite
+            </a>
+          </motion.div>
+
           {/* Title */}
           <motion.div variants={itemVariants} className="mb-12">
             <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
