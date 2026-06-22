@@ -20,9 +20,9 @@ export default function Upload() {
   const [episodes, setEpisodes] = useState<Episode[]>([
     {
       id: '1',
-      title: 'Episode 1: KI Basics',
-      videoUrl: '',
-      audioUrl: '',
+      title: 'Episode 1: Der Debug Podcast',
+      videoUrl: 'https://youtu.be/p4IK0mFbaNI',
+      audioUrl: 'https://files.manuscdn.com/user_upload_by_module/session_file/310519663350287427/fGeYlWGafWQoHJly.mp3',
     }
   ]);
   
