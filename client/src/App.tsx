@@ -11,7 +11,6 @@ import Outro from "./pages/Outro";
 import Upload from "./pages/Upload";
 import { useState, useEffect } from "react";
 
-
 function Router() {
   const [isTransitioning, setIsTransitioning] = useState(false);
 
