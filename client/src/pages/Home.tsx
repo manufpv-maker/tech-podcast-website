@@ -9,6 +9,7 @@ import { useAuth } from '@/_core/hooks/useAuth';
  * - Minimalistisches Design für Schüler
  * - Video und Audio Player
  * - Keine unnötigen Elemente
+ * - Optimiert für alle Geräte
  */
 
 export default function Home() {
