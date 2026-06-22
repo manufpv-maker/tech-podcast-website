@@ -17,7 +17,7 @@ export default function Home() {
   let { user, loading, error, isAuthenticated, logout } = useAuth();
 
   // Lade die erste Episode von der Upload-Seite
-  const [videoUrl, setVideoUrl] = useState('https://youtu.be/p4IK0mFbaNI');
+  const [videoUrl, setVideoUrl] = useState('p4IK0mFbaNI');
   const [audioUrl, setAudioUrl] = useState('https://files.manuscdn.com/user_upload_by_module/session_file/310519663350287427/fGeYlWGafWQoHJly.mp3');
 
   const containerVariants = {
@@ -76,10 +76,12 @@ export default function Home() {
             <h2 className="text-2xl font-bold text-white mb-4">Video</h2>
             <div className="bg-gray-900 rounded-lg overflow-hidden aspect-video">
               {videoUrl ? (
-                <video
-                  src={videoUrl}
-                  controls
-                  className="w-full h-full"
+                <iframe
+                  src={`https://www.youtube.com/embed/${videoUrl}`}
+                  title="Podcast Video"
+                  className="w-full h-full border-0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen={true}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center bg-gray-800">
