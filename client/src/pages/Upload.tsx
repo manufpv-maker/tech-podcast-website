@@ -1,78 +1,94 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Upload as UploadIcon, CheckCircle, AlertCircle } from 'lucide-react';
+import { Upload as UploadIcon, CheckCircle, AlertCircle, Plus, Trash2 } from 'lucide-react';
 
 /**
  * Design Philosophy: Upload Page for Der Debug Podcast
- * - Simple, clean interface for uploading video and audio
- * - Drag and drop support
- * - File preview and validation
- * - Success/error messages
+ * - Simple interface for adding episodes with external URLs
+ * - Display cover automatically
+ * - Manage episodes list
  */
 
+interface Episode {
+  id: string;
+  title: string;
+  videoUrl: string;
+  audioUrl: string;
+}
+
 export default function Upload() {
-  const [videoFile, setVideoFile] = useState<File | null>(null);
-  const [audioFile, setAudioFile] = useState<File | null>(null);
-  const [videoPreview, setVideoPreview] = useState('');
-  const [audioPreview, setAudioPreview] = useState('');
-  const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle');
+  const [episodes, setEpisodes] = useState<Episode[]>([
+    {
+      id: '1',
+      title: 'Episode 1: KI Basics',
+      videoUrl: '',
+      audioUrl: '',
+    }
+  ]);
+  
+  const [formData, setFormData] = useState({
+    title: '',
+    videoUrl: '',
+    audioUrl: '',
+  });
+
+  const [status, setStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [statusMessage, setStatusMessage] = useState('');
 
-  const handleVideoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.type.startsWith('video/')) {
-        setVideoFile(file);
-        setVideoPreview(URL.createObjectURL(file));
-      } else {
-        setStatusMessage('Bitte wähle eine Videodatei!');
-        setUploadStatus('error');
-      }
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  const handleAudioChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      if (file.type.startsWith('audio/')) {
-        setAudioFile(file);
-        setAudioPreview(URL.createObjectURL(file));
-      } else {
-        setStatusMessage('Bitte wähle eine Audiodatei!');
-        setUploadStatus('error');
-      }
-    }
-  };
-
-  const handleUpload = async () => {
-    if (!videoFile || !audioFile) {
-      setStatusMessage('Bitte wähle sowohl Video als auch Audio!');
-      setUploadStatus('error');
+  const handleAddEpisode = () => {
+    if (!formData.title || !formData.videoUrl || !formData.audioUrl) {
+      setStatus('error');
+      setStatusMessage('Bitte fülle alle Felder aus!');
       return;
     }
 
-    setUploadStatus('uploading');
-    setStatusMessage('Dateien werden hochgeladen...');
+    const newEpisode: Episode = {
+      id: Date.now().toString(),
+      title: formData.title,
+      videoUrl: formData.videoUrl,
+      audioUrl: formData.audioUrl,
+    };
 
-    try {
-      // Simulate upload delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      setUploadStatus('success');
-      setStatusMessage(`✅ Upload erfolgreich! Video: ${videoFile.name}, Audio: ${audioFile.name}`);
-      
-      // Reset after 3 seconds
-      setTimeout(() => {
-        setVideoFile(null);
-        setAudioFile(null);
-        setVideoPreview('');
-        setAudioPreview('');
-        setUploadStatus('idle');
-      }, 3000);
-    } catch (error) {
-      setUploadStatus('error');
-      setStatusMessage('❌ Upload fehlgeschlagen. Bitte versuche es erneut.');
-    }
+    setEpisodes([...episodes, newEpisode]);
+    setFormData({ title: '', videoUrl: '', audioUrl: '' });
+    setStatus('success');
+    setStatusMessage('✅ Episode hinzugefügt!');
+    setTimeout(() => setStatus('idle'), 3000);
+  };
+
+  const handleDeleteEpisode = (id: string) => {
+    setEpisodes(episodes.filter(ep => ep.id !== id));
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.23, 1, 0.32, 1],
+      },
+    },
   };
 
   return (
@@ -91,132 +107,151 @@ export default function Upload() {
           className="text-center mb-12"
         >
           <h1 className="font-display text-5xl md:text-6xl font-bold mb-4">
-            <span className="text-white">Upload </span>
-            <span className="bg-gradient-to-r from-cyan-400 to-pink-400 bg-clip-text text-transparent">Deine Episode</span>
+            <span className="text-white">Neue </span>
+            <span className="bg-gradient-to-r from-cyan-400 to-pink-400 bg-clip-text text-transparent">Episode</span>
           </h1>
-          <p className="text-gray-300 text-lg">Lade Video und Audio für deine nächste Episode hoch</p>
+          <p className="text-gray-300 text-lg">Füge Video und Audio URLs hinzu</p>
         </motion.div>
 
-        {/* Upload Area */}
-        <div className="grid md:grid-cols-2 gap-8 mb-8">
-          {/* Video Upload */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative"
-          >
-            <label className="block">
-              <div className="relative border-2 border-dashed border-cyan-400/50 rounded-lg p-8 hover:border-cyan-400 transition-colors cursor-pointer bg-cyan-400/5 hover:bg-cyan-400/10">
-                <input
-                  type="file"
-                  accept="video/*"
-                  onChange={handleVideoChange}
-                  className="hidden"
-                />
-                <div className="flex flex-col items-center gap-3">
-                  <UploadIcon className="w-12 h-12 text-cyan-400" />
-                  <div className="text-center">
-                    <p className="text-white font-semibold">Video hochladen</p>
-                    <p className="text-gray-400 text-sm">MP4, WebM, etc.</p>
-                  </div>
-                </div>
-              </div>
-            </label>
-            {videoPreview && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mt-4"
-              >
-                <video
-                  src={videoPreview}
-                  className="w-full h-40 rounded-lg object-cover border border-cyan-400/30"
-                  controls
-                />
-                <p className="text-cyan-400 text-sm mt-2 truncate">{videoFile?.name}</p>
-              </motion.div>
-            )}
-          </motion.div>
-
-          {/* Audio Upload */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative"
-          >
-            <label className="block">
-              <div className="relative border-2 border-dashed border-pink-400/50 rounded-lg p-8 hover:border-pink-400 transition-colors cursor-pointer bg-pink-400/5 hover:bg-pink-400/10">
-                <input
-                  type="file"
-                  accept="audio/*"
-                  onChange={handleAudioChange}
-                  className="hidden"
-                />
-                <div className="flex flex-col items-center gap-3">
-                  <UploadIcon className="w-12 h-12 text-pink-400" />
-                  <div className="text-center">
-                    <p className="text-white font-semibold">Audio hochladen</p>
-                    <p className="text-gray-400 text-sm">MP3, WAV, etc.</p>
-                  </div>
-                </div>
-              </div>
-            </label>
-            {audioPreview && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="mt-4"
-              >
-                <audio
-                  src={audioPreview}
-                  className="w-full rounded-lg border border-pink-400/30"
-                  controls
-                />
-                <p className="text-pink-400 text-sm mt-2 truncate">{audioFile?.name}</p>
-              </motion.div>
-            )}
-          </motion.div>
-        </div>
-
-        {/* Status Message */}
-        {uploadStatus !== 'idle' && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className={`p-4 rounded-lg mb-8 flex items-center gap-3 ${
-              uploadStatus === 'success'
-                ? 'bg-green-400/10 border border-green-400/50 text-green-400'
-                : uploadStatus === 'error'
-                ? 'bg-red-400/10 border border-red-400/50 text-red-400'
-                : 'bg-cyan-400/10 border border-cyan-400/50 text-cyan-400'
-            }`}
-          >
-            {uploadStatus === 'success' && <CheckCircle className="w-5 h-5" />}
-            {uploadStatus === 'error' && <AlertCircle className="w-5 h-5" />}
-            <span>{statusMessage}</span>
-          </motion.div>
-        )}
-
-        {/* Upload Button */}
+        {/* Add Episode Form */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="flex gap-4 justify-center"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="bg-gray-900/50 rounded-lg p-8 border border-gray-800 mb-12"
         >
-          <button
-            onClick={handleUpload}
-            disabled={!videoFile || !audioFile || uploadStatus === 'uploading'}
-            className={`px-8 py-3 rounded-lg font-semibold transition-all ${
-              videoFile && audioFile && uploadStatus !== 'uploading'
-                ? 'bg-gradient-to-r from-cyan-400 to-pink-400 text-black hover:shadow-lg hover:shadow-cyan-400/50 cursor-pointer'
-                : 'bg-gray-600 text-gray-300 cursor-not-allowed opacity-50'
-            }`}
+          <h2 className="text-2xl font-bold text-white mb-6">Episode hinzufügen</h2>
+          
+          <div className="space-y-4 mb-6">
+            {/* Title Input */}
+            <motion.div variants={itemVariants}>
+              <label className="block text-white font-semibold mb-2">Episode Titel</label>
+              <input
+                type="text"
+                name="title"
+                value={formData.title}
+                onChange={handleInputChange}
+                placeholder="z.B. Episode 1: KI Basics"
+                className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400"
+              />
+            </motion.div>
+
+            {/* Video URL Input */}
+            <motion.div variants={itemVariants}>
+              <label className="block text-white font-semibold mb-2">Video URL</label>
+              <input
+                type="url"
+                name="videoUrl"
+                value={formData.videoUrl}
+                onChange={handleInputChange}
+                placeholder="https://youtube.com/watch?v=... oder https://drive.google.com/..."
+                className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400"
+              />
+              <p className="text-sm text-gray-400 mt-1">YouTube, Google Drive, Vimeo, etc.</p>
+            </motion.div>
+
+            {/* Audio URL Input */}
+            <motion.div variants={itemVariants}>
+              <label className="block text-white font-semibold mb-2">Audio URL</label>
+              <input
+                type="url"
+                name="audioUrl"
+                value={formData.audioUrl}
+                onChange={handleInputChange}
+                placeholder="https://soundcloud.com/... oder https://drive.google.com/..."
+                className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400"
+              />
+              <p className="text-sm text-gray-400 mt-1">SoundCloud, Google Drive, Anchor, etc.</p>
+            </motion.div>
+          </div>
+
+          {/* Status Message */}
+          {status !== 'idle' && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={`p-4 rounded-lg mb-6 flex items-center gap-3 ${
+                status === 'success'
+                  ? 'bg-green-400/10 border border-green-400/50 text-green-400'
+                  : 'bg-red-400/10 border border-red-400/50 text-red-400'
+              }`}
+            >
+              {status === 'success' && <CheckCircle className="w-5 h-5" />}
+              {status === 'error' && <AlertCircle className="w-5 h-5" />}
+              <span>{statusMessage}</span>
+            </motion.div>
+          )}
+
+          {/* Add Button */}
+          <motion.button
+            variants={itemVariants}
+            onClick={handleAddEpisode}
+            className="w-full px-6 py-3 rounded-lg font-semibold bg-gradient-to-r from-cyan-400 to-pink-400 text-black hover:shadow-lg hover:shadow-cyan-400/50 transition-all flex items-center justify-center gap-2"
           >
-            {uploadStatus === 'uploading' ? 'Wird hochgeladen...' : 'Hochladen'}
-          </button>
+            <Plus className="w-5 h-5" />
+            Episode hinzufügen
+          </motion.button>
+        </motion.div>
+
+        {/* Episodes List */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <h2 className="text-2xl font-bold text-white mb-6">Deine Episoden ({episodes.length})</h2>
+          
+          <div className="space-y-4">
+            {episodes.map((episode, index) => (
+              <motion.div
+                key={episode.id}
+                variants={itemVariants}
+                className="bg-gray-900/50 rounded-lg p-6 border border-gray-800 hover:border-cyan-400/50 transition-colors"
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-white mb-2">{episode.title}</h3>
+                    <div className="space-y-2 text-sm text-gray-400">
+                      <p>
+                        <span className="text-cyan-400">Video:</span> {episode.videoUrl.substring(0, 50)}...
+                      </p>
+                      <p>
+                        <span className="text-pink-400">Audio:</span> {episode.audioUrl.substring(0, 50)}...
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleDeleteEpisode(episode.id)}
+                    className="p-2 rounded-lg hover:bg-red-400/10 text-red-400 transition-colors"
+                  >
+                    <Trash2 className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Preview */}
+                <div className="grid md:grid-cols-2 gap-4">
+                  {episode.videoUrl && (
+                    <div className="bg-gray-800 rounded-lg overflow-hidden">
+                      <iframe
+                        src={episode.videoUrl.includes('youtube.com') ? episode.videoUrl.replace('watch?v=', 'embed/') : episode.videoUrl}
+                        className="w-full h-40"
+                        allowFullScreen
+                      />
+                    </div>
+                  )}
+                  {episode.audioUrl && (
+                    <div className="bg-gray-800 rounded-lg p-4">
+                      <audio
+                        src={episode.audioUrl}
+                        controls
+                        className="w-full"
+                      />
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </motion.div>
 
         {/* Info Box */}
@@ -228,10 +263,11 @@ export default function Upload() {
         >
           <h3 className="text-white font-semibold mb-3">💡 Tipps:</h3>
           <ul className="text-gray-300 space-y-2 text-sm">
-            <li>✅ Stelle sicher, dass dein Video und Audio die gleiche Länge haben</li>
-            <li>✅ Empfohlenes Video-Format: MP4 (H.264)</li>
-            <li>✅ Empfohlenes Audio-Format: MP3 (128-320 kbps)</li>
-            <li>✅ Maximale Dateigröße: 500 MB pro Datei</li>
+            <li>✅ Lade dein Video auf YouTube, Vimeo oder Google Drive hoch</li>
+            <li>✅ Lade dein Audio auf SoundCloud, Anchor oder Google Drive hoch</li>
+            <li>✅ Kopiere die URLs und füge sie hier ein</li>
+            <li>✅ Das Cover wird automatisch angezeigt</li>
+            <li>✅ Speichere die Episoden-URLs für später</li>
           </ul>
         </motion.div>
       </div>
