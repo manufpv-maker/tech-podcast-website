@@ -16,8 +16,9 @@ export default function Home() {
   // To implement login/logout functionality, simply call logout() or redirect to getLoginUrl()
   let { user, loading, error, isAuthenticated, logout } = useAuth();
 
-  const [videoUrl, setVideoUrl] = useState('');
-  const [audioUrl, setAudioUrl] = useState('');
+  // Lade die erste Episode von der Upload-Seite
+  const [videoUrl, setVideoUrl] = useState('https://youtu.be/p4IK0mFbaNI');
+  const [audioUrl, setAudioUrl] = useState('https://files.manuscdn.com/user_upload_by_module/session_file/310519663350287427/fGeYlWGafWQoHJly.mp3');
 
   const containerVariants = {
     hidden: { opacity: 0 },
