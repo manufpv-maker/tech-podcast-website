@@ -3,11 +3,12 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/_core/hooks/useAuth';
+import { Play } from 'lucide-react';
 
 /**
  * Design Philosophy: Clean & Simple
  * - Minimalistisches Design für Schüler
- * - Video und Audio Player
+ * - Video und Audio Player mit Covern
  * - Keine unnötigen Elemente
  * - Optimiert für alle Geräte
  */
@@ -20,6 +21,8 @@ export default function Home() {
   // Lade die erste Episode von der Upload-Seite
   const [videoUrl, setVideoUrl] = useState('p4IK0mFbaNI');
   const [audioUrl, setAudioUrl] = useState('https://files.manuscdn.com/user_upload_by_module/session_file/310519663350287427/fGeYlWGafWQoHJly.mp3');
+  const [showVideoPlayer, setShowVideoPlayer] = useState(false);
+  const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -75,44 +78,91 @@ export default function Home() {
           {/* Video Section */}
           <motion.div variants={itemVariants} className="mb-12">
             <h2 className="text-2xl font-bold text-white mb-4">Video</h2>
-            <div className="bg-gray-900 rounded-lg overflow-hidden aspect-video">
-              {videoUrl ? (
-                <iframe
-                  src={`https://www.youtube.com/embed/${videoUrl}`}
-                  title="Podcast Video"
-                  className="w-full h-full border-0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen={true}
+            {showVideoPlayer ? (
+              <div className="bg-gray-900 rounded-lg overflow-hidden aspect-video">
+                {videoUrl ? (
+                  <iframe
+                    src={`https://www.youtube.com/embed/${videoUrl}?autoplay=1`}
+                    title="Podcast Video"
+                    className="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen={true}
+                  />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-gray-800">
+                    <p className="text-gray-400">Video wird hier angezeigt</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <motion.div
+                className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video cursor-pointer group"
+                onClick={() => setShowVideoPlayer(true)}
+                whileHover={{ scale: 1.02 }}
+              >
+                <img
+                  src="https://d2xsxph8kpxj0f.cloudfront.net/310519663350287427/enmAwgtoyiDevNipdYAUmq/video-cover-niWXTJMdsgkaDUjaKGoPy6.webp"
+                  alt="Video Cover"
+                  className="w-full h-full object-cover"
                 />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-800">
-                  <p className="text-gray-400">Video wird hier angezeigt</p>
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center shadow-lg shadow-red-600/50"
+                  >
+                    <Play size={32} className="text-white fill-white ml-1" />
+                  </motion.div>
                 </div>
-              )}
-            </div>
+              </motion.div>
+            )}
             <p className="text-sm text-gray-400 mt-2">
-              Video-URL: {videoUrl || 'Noch nicht hochgeladen'}
+              {showVideoPlayer ? 'Video wird abgespielt' : 'Klick zum Abspielen'}
             </p>
           </motion.div>
 
           {/* Audio Section */}
           <motion.div variants={itemVariants} className="mb-12">
             <h2 className="text-2xl font-bold text-white mb-4">Audio</h2>
-            <div className="bg-gray-900 rounded-lg p-6">
-              {audioUrl ? (
-                <audio
-                  src={audioUrl}
-                  controls
-                  className="w-full"
+            {showAudioPlayer ? (
+              <div className="bg-gray-900 rounded-lg p-6">
+                {audioUrl ? (
+                  <audio
+                    src={audioUrl}
+                    controls
+                    autoPlay
+                    className="w-full"
+                  />
+                ) : (
+                  <div className="flex items-center justify-center bg-gray-800 rounded p-8">
+                    <p className="text-gray-400">Audio wird hier angezeigt</p>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <motion.div
+                className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video cursor-pointer group"
+                onClick={() => setShowAudioPlayer(true)}
+                whileHover={{ scale: 1.02 }}
+              >
+                <img
+                  src="https://d2xsxph8kpxj0f.cloudfront.net/310519663350287427/enmAwgtoyiDevNipdYAUmq/audio-cover-5ie3nuXjcLkRFw59rRbDhc.webp"
+                  alt="Audio Cover"
+                  className="w-full h-full object-cover"
                 />
-              ) : (
-                <div className="flex items-center justify-center bg-gray-800 rounded p-8">
-                  <p className="text-gray-400">Audio wird hier angezeigt</p>
+                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
+                  <motion.div
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="w-16 h-16 bg-cyan-500 rounded-full flex items-center justify-center shadow-lg shadow-cyan-500/50"
+                  >
+                    <Play size={32} className="text-white fill-white ml-1" />
+                  </motion.div>
                 </div>
-              )}
-            </div>
+              </motion.div>
+            )}
             <p className="text-sm text-gray-400 mt-2">
-              Audio-URL: {audioUrl || 'Noch nicht hochgeladen'}
+              {showAudioPlayer ? 'Audio wird abgespielt' : 'Klick zum Abspielen'}
             </p>
           </motion.div>
 
