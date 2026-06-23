@@ -44,7 +44,7 @@ export default function Header() {
                 href={path}
                 className="text-gray-300 hover:text-white transition-colors duration-200 cursor-pointer"
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95, className: "glitch-animation" }}
+                whileTap={{ scale: 0.95 }}
               >
                 {item}
               </motion.a>
