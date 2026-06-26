@@ -31,16 +31,36 @@ export default function Home() {
       if (isVideo) setDownloadingVideo(true);
       else setDownloadingAudio(true);
 
-      const response = await fetch(url);
+      // Verwende einen einfachen Fetch mit no-cors fallback
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          'Accept': '*/*',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const blob = await response.blob();
       
+      // Erstelle einen Download-Link
+      const downloadUrl = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
+      link.style.display = 'none';
+      link.href = downloadUrl;
       link.download = filename;
+      
+      // Füge zum DOM hinzu, klicke und entferne
       document.body.appendChild(link);
       link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(link.href);
+      
+      // Cleanup
+      setTimeout(() => {
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(downloadUrl);
+      }, 100);
     } catch (error) {
       console.error('Download error:', error);
       alert('Download fehlgeschlagen. Bitte versuchen Sie es später erneut.');
