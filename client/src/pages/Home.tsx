@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/_core/hooks/useAuth';
-import { Play } from 'lucide-react';
+import { Play, Download } from 'lucide-react';
 
 /**
  * Design Philosophy: Clean & Simple
@@ -116,9 +116,21 @@ export default function Home() {
                 </div>
               </motion.div>
             )}
-            <p className="text-sm text-gray-400 mt-2">
-              {showVideoPlayer ? 'Video wird abgespielt' : 'Klick zum Abspielen'}
-            </p>
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-sm text-gray-400">
+                {showVideoPlayer ? 'Video wird abgespielt' : 'Klick zum Abspielen'}
+              </p>
+              {videoUrl && (
+                <a
+                  href={videoUrl}
+                  download
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                >
+                  <Download size={18} />
+                  <span>Herunterladen</span>
+                </a>
+              )}
+            </div>
           </motion.div>
 
           {/* Audio Section */}
@@ -161,9 +173,21 @@ export default function Home() {
                 </div>
               </motion.div>
             )}
-            <p className="text-sm text-gray-400 mt-2">
-              {showAudioPlayer ? 'Audio wird abgespielt' : 'Klick zum Abspielen'}
-            </p>
+            <div className="flex items-center justify-between mt-4">
+              <p className="text-sm text-gray-400">
+                {showAudioPlayer ? 'Audio wird abgespielt' : 'Klick zum Abspielen'}
+              </p>
+              {audioUrl && (
+                <a
+                  href={audioUrl}
+                  download
+                  className="flex items-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors"
+                >
+                  <Download size={18} />
+                  <span>Herunterladen</span>
+                </a>
+              )}
+            </div>
           </motion.div>
 
           {/* Info Section */}
