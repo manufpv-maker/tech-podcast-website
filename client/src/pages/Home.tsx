@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/_core/hooks/useAuth';
-import { Play, Download } from 'lucide-react';
+import { Play, Download, Loader2 } from 'lucide-react';
 
 /**
  * Design Philosophy: Clean & Simple
@@ -23,6 +23,32 @@ export default function Home() {
   const [audioUrl, setAudioUrl] = useState('https://files.manuscdn.com/user_upload_by_module/session_file/310519663350287427/JZJtJyRbTbfSykJQ.mp3');
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
+  const [downloadingVideo, setDownloadingVideo] = useState(false);
+  const [downloadingAudio, setDownloadingAudio] = useState(false);
+
+  const handleDownload = async (url: string, filename: string, isVideo: boolean) => {
+    try {
+      if (isVideo) setDownloadingVideo(true);
+      else setDownloadingAudio(true);
+
+      const response = await fetch(url);
+      const blob = await response.blob();
+      
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(link.href);
+    } catch (error) {
+      console.error('Download error:', error);
+      alert('Download fehlgeschlagen. Bitte versuchen Sie es später erneut.');
+    } finally {
+      if (isVideo) setDownloadingVideo(false);
+      else setDownloadingAudio(false);
+    }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -121,14 +147,18 @@ export default function Home() {
                 {showVideoPlayer ? 'Video wird abgespielt' : 'Klick zum Abspielen'}
               </p>
               {videoUrl && (
-                <a
-                  href={videoUrl}
-                  download
-                  className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                <button
+                  onClick={() => handleDownload(videoUrl, 'podcast-video.mp4', true)}
+                  disabled={downloadingVideo}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-600 hover:bg-red-700 disabled:bg-red-800 text-white rounded-lg transition-colors"
                 >
-                  <Download size={18} />
-                  <span>Herunterladen</span>
-                </a>
+                  {downloadingVideo ? (
+                    <Loader2 size={18} className="animate-spin" />
+                  ) : (
+                    <Download size={18} />
+                  )}
+                  <span>{downloadingVideo ? 'Wird heruntergeladen...' : 'Herunterladen'}</span>
+                </button>
               )}
             </div>
           </motion.div>
@@ -178,14 +208,18 @@ export default function Home() {
                 {showAudioPlayer ? 'Audio wird abgespielt' : 'Klick zum Abspielen'}
               </p>
               {audioUrl && (
-                <a
-                  href={audioUrl}
-                  download
-                  className="flex items-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white rounded-lg transition-colors"
+                <button
+                  onClick={() => handleDownload(audioUrl, 'podcast-audio.mp3', false)}
+                  disabled={downloadingAudio}
+                  className="flex items-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 disabled:bg-cyan-700 text-white rounded-lg transition-colors"
                 >
-                  <Download size={18} />
-                  <span>Herunterladen</span>
-                </a>
+                  {downloadingAudio ? (
+                    <Loader2 size={18} className="animate-spin" />
+                  ) : (
+                    <Download size={18} />
+                  )}
+                  <span>{downloadingAudio ? 'Wird heruntergeladen...' : 'Herunterladen'}</span>
+                </button>
               )}
             </div>
           </motion.div>
