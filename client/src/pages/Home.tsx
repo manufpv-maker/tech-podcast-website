@@ -19,7 +19,7 @@ export default function Home() {
   let { user, loading, error, isAuthenticated, logout } = useAuth();
 
   // Lade die erste Episode von der Upload-Seite
-  const [videoUrl, setVideoUrl] = useState('p4IK0mFbaNI');
+  const [videoUrl, setVideoUrl] = useState('https://files.manuscdn.com/user_upload_by_module/session_file/310519663350287427/ADqNmMMrpLczRXgm.mp4');
   const [audioUrl, setAudioUrl] = useState('https://files.manuscdn.com/user_upload_by_module/session_file/310519663350287427/JZJtJyRbTbfSykJQ.mp3');
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
@@ -81,12 +81,11 @@ export default function Home() {
             {showVideoPlayer ? (
               <div className="bg-gray-900 rounded-lg overflow-hidden aspect-video">
                 {videoUrl ? (
-                  <iframe
-                    src={`https://www.youtube.com/embed/${videoUrl}?autoplay=1`}
-                    title="Podcast Video"
-                    className="w-full h-full border-0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen={true}
+                  <video
+                    src={videoUrl}
+                    controls
+                    autoPlay
+                    className="w-full h-full"
                   />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-gray-800">
@@ -104,6 +103,7 @@ export default function Home() {
                   src="https://d2xsxph8kpxj0f.cloudfront.net/310519663350287427/enmAwgtoyiDevNipdYAUmq/video-cover-niWXTJMdsgkaDUjaKGoPy6.webp"
                   alt="Video Cover"
                   className="w-full h-full object-cover"
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-black/30 group-hover:bg-black/40 transition-colors flex items-center justify-center">
                   <motion.div
