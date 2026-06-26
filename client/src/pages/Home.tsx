@@ -20,7 +20,7 @@ export default function Home() {
 
   // Lade die erste Episode von der Upload-Seite
   const [videoUrl, setVideoUrl] = useState('p4IK0mFbaNI');
-  const [audioUrl, setAudioUrl] = useState('https://files.manuscdn.com/user_upload_by_module/session_file/310519663350287427/fGeYlWGafWQoHJly.mp3');
+  const [audioUrl, setAudioUrl] = useState('https://files.manuscdn.com/user_upload_by_module/session_file/310519663350287427/JZJtJyRbTbfSykJQ.mp3');
   const [showVideoPlayer, setShowVideoPlayer] = useState(false);
   const [showAudioPlayer, setShowAudioPlayer] = useState(false);
 
